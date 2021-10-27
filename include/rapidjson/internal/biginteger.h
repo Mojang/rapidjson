@@ -240,6 +240,10 @@ private:
     static uint64_t ParseUint64(const char* begin, const char* end) {
         uint64_t r = 0;
         for (const char* p = begin; p != end; ++p) {
+<<<<<<< Updated upstream
+=======
+            RAPIDJSON_ASSERT(p != nullptr);
+>>>>>>> Stashed changes
             RAPIDJSON_ASSERT(*p >= '0' && *p <= '9');
             r = r * 10u + static_cast<unsigned>(*p - '0');
         }
@@ -248,6 +252,7 @@ private:
 
     // Assume a * b + k < 2^128
     static uint64_t MulAdd64(uint64_t a, uint64_t b, uint64_t k, uint64_t* outHigh) {
+        RAPIDJSON_ASSERT(outHigh != nullptr);
 #if defined(_MSC_VER) && defined(_M_AMD64)
         uint64_t low = _umul128(a, b, outHigh) + k;
         if (low < k)

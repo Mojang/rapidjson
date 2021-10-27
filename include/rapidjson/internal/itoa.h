@@ -40,7 +40,7 @@ inline char* u32toa(uint32_t value, char* buffer) {
     RAPIDJSON_ASSERT(buffer != 0);
 
     const char* cDigitsLut = GetDigitsLut();
-
+    RAPIDJSON_ASSERT(cDigitsLut != nullptr);
     if (value < 10000) {
         const uint32_t d1 = (value / 100) << 1;
         const uint32_t d2 = (value % 100) << 1;
@@ -126,6 +126,7 @@ inline char* i32toa(int32_t value, char* buffer) {
 inline char* u64toa(uint64_t value, char* buffer) {
     RAPIDJSON_ASSERT(buffer != 0);
     const char* cDigitsLut = GetDigitsLut();
+    RAPIDJSON_ASSERT(cDigitsLut != nullptr);
     const uint64_t  kTen8 = 100000000;
     const uint64_t  kTen9 = kTen8 * 10;
     const uint64_t kTen10 = kTen8 * 100;

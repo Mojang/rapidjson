@@ -33,6 +33,7 @@ RAPIDJSON_DIAG_OFF(array-bounds) // some gcc versions generate wrong warnings ht
 #endif
 
 inline void GrisuRound(char* buffer, int len, uint64_t delta, uint64_t rest, uint64_t ten_kappa, uint64_t wp_w) {
+    RAPIDJSON_ASSERT(buffer != nullptr);
     while (rest < wp_w && delta - rest >= ten_kappa &&
            (rest + ten_kappa < wp_w ||  /// closer
             wp_w - rest > rest + ten_kappa - wp_w)) {
@@ -58,6 +59,12 @@ inline int CountDecimalDigit32(uint32_t n) {
 }
 
 inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buffer, int* len, int* K) {
+<<<<<<< Updated upstream
+=======
+    RAPIDJSON_ASSERT(buffer != 0);
+    RAPIDJSON_ASSERT(len != 0);
+    RAPIDJSON_ASSERT(K != 0);
+>>>>>>> Stashed changes
     static const uint32_t kPow10[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 };
     const DiyFp one(uint64_t(1) << -Mp.e, Mp.e);
     const DiyFp wp_w = Mp - W;
@@ -124,6 +131,7 @@ inline void Grisu2(double value, char* buffer, int* length, int* K) {
 }
 
 inline char* WriteExponent(int K, char* buffer) {
+    RAPIDJSON_ASSERT(buffer != nullptr);
     if (K < 0) {
         *buffer++ = '-';
         K = -K;
@@ -133,11 +141,13 @@ inline char* WriteExponent(int K, char* buffer) {
         *buffer++ = static_cast<char>('0' + static_cast<char>(K / 100));
         K %= 100;
         const char* d = GetDigitsLut() + K * 2;
+        RAPIDJSON_ASSERT(d != nullptr);
         *buffer++ = d[0];
         *buffer++ = d[1];
     }
     else if (K >= 10) {
         const char* d = GetDigitsLut() + K * 2;
+        RAPIDJSON_ASSERT(d != nullptr);
         *buffer++ = d[0];
         *buffer++ = d[1];
     }
@@ -148,6 +158,7 @@ inline char* WriteExponent(int K, char* buffer) {
 }
 
 inline char* Prettify(char* buffer, int length, int k, int maxDecimalPlaces) {
+    RAPIDJSON_ASSERT(buffer != nullptr);
     const int kk = length + k;  // 10^(kk-1) <= v < 10^kk
 
     if (0 <= k && kk <= 21) {
@@ -214,6 +225,7 @@ inline char* Prettify(char* buffer, int length, int k, int maxDecimalPlaces) {
 }
 
 inline char* dtoa(double value, char* buffer, int maxDecimalPlaces = 324) {
+    RAPIDJSON_ASSERT(buffer != nullptr);
     RAPIDJSON_ASSERT(maxDecimalPlaces >= 1);
     Double d(value);
     if (d.IsZero()) {
