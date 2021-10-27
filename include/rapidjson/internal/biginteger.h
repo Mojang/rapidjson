@@ -186,9 +186,8 @@ public:
     bool Difference(const BigInteger& rhs, BigInteger* out) const {
         int cmp = Compare(rhs);
         RAPIDJSON_ASSERT(cmp != 0);
-        const BigInteger* a = nullptr;  // Makes a > b
-        const BigInteger* b = nullptr;
-        bool ret = false;
+        const BigInteger *a, *b;  // Makes a > b
+        bool ret;
         if (cmp < 0) { a = &rhs; b = this; ret = true; }
         else         { a = this; b = &rhs; ret = false; }
 
@@ -240,10 +239,7 @@ private:
     static uint64_t ParseUint64(const char* begin, const char* end) {
         uint64_t r = 0;
         for (const char* p = begin; p != end; ++p) {
-<<<<<<< Updated upstream
-=======
             RAPIDJSON_ASSERT(p != nullptr);
->>>>>>> Stashed changes
             RAPIDJSON_ASSERT(*p >= '0' && *p <= '9');
             r = r * 10u + static_cast<unsigned>(*p - '0');
         }

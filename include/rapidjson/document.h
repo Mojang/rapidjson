@@ -807,10 +807,7 @@ public:
                     for (GenericValue* v = e; v != e + data_.a.size; ++v) {
                         RAPIDJSON_ASSERT(v != nullptr);
                         v->~GenericValue();
-<<<<<<< Updated upstream
-=======
                     }
->>>>>>> Stashed changes
                     Allocator::Free(e);
                 }
                 break;

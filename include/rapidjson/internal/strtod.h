@@ -130,11 +130,8 @@ inline bool StrtodFast(double d, int p, double* result) {
 
 // Compute an approximation and see if it is within 1/2 ULP
 inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result) {
-<<<<<<< Updated upstream
-=======
     RAPIDJSON_ASSERT(decimals != nullptr);
     RAPIDJSON_ASSERT(result != nullptr);
->>>>>>> Stashed changes
     uint64_t significand = 0;
     int i = 0;   // 2^64 - 1 = 18446744073709551615, 1844674407370955161 = 0x1999999999999999    
     for (; i < dLen; i++) {
@@ -230,10 +227,7 @@ inline double StrtodBigInteger(double approx, const char* decimals, int dLen, in
 }
 
 inline double StrtodFullPrecision(double d, int p, const char* decimals, size_t length, size_t decimalPosition, int exp) {
-<<<<<<< Updated upstream
-=======
     RAPIDJSON_ASSERT(decimals != nullptr);
->>>>>>> Stashed changes
     RAPIDJSON_ASSERT(d >= 0.0);
     RAPIDJSON_ASSERT(length >= 1);
 

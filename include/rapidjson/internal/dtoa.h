@@ -59,12 +59,9 @@ inline int CountDecimalDigit32(uint32_t n) {
 }
 
 inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buffer, int* len, int* K) {
-<<<<<<< Updated upstream
-=======
     RAPIDJSON_ASSERT(buffer != 0);
     RAPIDJSON_ASSERT(len != 0);
     RAPIDJSON_ASSERT(K != 0);
->>>>>>> Stashed changes
     static const uint32_t kPow10[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 };
     const DiyFp one(uint64_t(1) << -Mp.e, Mp.e);
     const DiyFp wp_w = Mp - W;
