@@ -240,8 +240,7 @@ private:
     static uint64_t ParseUint64(const char* begin, const char* end) {
         uint64_t r = 0;
         for (const char* p = begin; p != end; ++p) {
-            RAPIDJSON_ASSERT(p != nullptr);
-            RAPIDJSON_ASSERT(*p >= '0' && *p <= '9');
+            RAPIDJSON_ASSERT(p != nullptr && *p >= '0' && *p <= '9');
             r = r * 10u + static_cast<unsigned>(*p - '0');
         }
         return r;

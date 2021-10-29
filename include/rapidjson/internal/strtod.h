@@ -113,7 +113,6 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
 inline bool StrtodFast(double d, int p, double* result) {
     // Use fast path for string-to-double conversion if possible
     // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/
-    RAPIDJSON_ASSERT(result != nullptr);
     if (p > 22  && p < 22 + 16) {
         // Fast Path Cases In Disguise
         d *= internal::Pow10(p - 22);
@@ -121,6 +120,7 @@ inline bool StrtodFast(double d, int p, double* result) {
     }
 
     if (p >= -22 && p <= 22 && d <= 9007199254740991.0) { // 2^53 - 1
+        RAPIDJSON_ASSERT(result != nullptr);
         *result = FastPath(d, p);
         return true;
     }

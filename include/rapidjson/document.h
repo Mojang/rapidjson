@@ -2069,7 +2069,6 @@ private:
     //! Initialize this value as copy string with initial data, without calling destructor.
     void SetStringRaw(StringRefType s, Allocator& allocator) {
         Ch* str = 0;
-        RAPIDJSON_ASSERT(str != nullptr);
         if (ShortString::Usable(s.length)) {
             data_.f.flags = kShortStringFlag;
             data_.ss.SetLength(s.length);
@@ -2080,6 +2079,7 @@ private:
             str = static_cast<Ch *>(allocator.Malloc((s.length + 1) * sizeof(Ch)));
             SetStringPointer(str);
         }
+        RAPIDJSON_ASSERT(str != nullptr);
         std::memcpy(str, s, s.length * sizeof(Ch));
         str[s.length] = '\0';
     }
