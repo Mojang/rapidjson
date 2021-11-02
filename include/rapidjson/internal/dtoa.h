@@ -58,17 +58,15 @@ inline int CountDecimalDigit32(uint32_t n) {
     return 9;
 }
 
-inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buffer, int* len, int* K) {
+inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buffer, int& len, int& K) {
     RAPIDJSON_ASSERT(buffer != nullptr);
-    RAPIDJSON_ASSERT(len != nullptr);
-    RAPIDJSON_ASSERT(K != nullptr);
     static const uint32_t kPow10[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000 };
     const DiyFp one(uint64_t(1) << -Mp.e, Mp.e);
     const DiyFp wp_w = Mp - W;
     uint32_t p1 = static_cast<uint32_t>(Mp.f >> -one.e);
     uint64_t p2 = Mp.f & (one.f - 1);
     int kappa = CountDecimalDigit32(p1); // kappa in [0, 9]
-    *len = 0;
+    len = 0;
 
     while (kappa > 0) {
         uint32_t d = 0;
@@ -84,13 +82,13 @@ inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buff
             case  1: d = p1;              p1 =           0; break;
             default:;
         }
-        if (d || *len)
-            buffer[(*len)++] = static_cast<char>('0' + static_cast<char>(d));
+        if (d || len)
+            buffer[len++] = static_cast<char>('0' + static_cast<char>(d));
         kappa--;
         uint64_t tmp = (static_cast<uint64_t>(p1) << -one.e) + p2;
         if (tmp <= delta) {
-            *K += kappa;
-            GrisuRound(buffer, *len, delta, tmp, static_cast<uint64_t>(kPow10[kappa]) << -one.e, wp_w.f);
+            K += kappa;
+            GrisuRound(buffer, len, delta, tmp, static_cast<uint64_t>(kPow10[kappa]) << -one.e, wp_w.f);
             return;
         }
     }
@@ -100,20 +98,21 @@ inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buff
         p2 *= 10;
         delta *= 10;
         char d = static_cast<char>(p2 >> -one.e);
-        if (d || *len)
-            buffer[(*len)++] = static_cast<char>('0' + d);
+        if (d || len)
+            buffer[(len)++] = static_cast<char>('0' + d);
         p2 &= one.f - 1;
         kappa--;
         if (p2 < delta) {
-            *K += kappa;
+            K += kappa;
             int index = -kappa;
-            GrisuRound(buffer, *len, delta, p2, one.f, wp_w.f * (index < 9 ? kPow10[index] : 0));
+            GrisuRound(buffer, len, delta, p2, one.f, wp_w.f * (index < 9 ? kPow10[index] : 0));
             return;
         }
     }
 }
 
-inline void Grisu2(double value, char* buffer, int* length, int* K) {
+inline void Grisu2(double value, char* buffer, int& length, int& K) {
+    RAPIDJSON_ASSERT(buffer != nullptr);
     const DiyFp v(value);
     DiyFp w_m, w_p;
     v.NormalizedBoundaries(&w_m, &w_p);
@@ -239,7 +238,7 @@ inline char* dtoa(double value, char* buffer, int maxDecimalPlaces = 324) {
             value = -value;
         }
         int length, K;
-        Grisu2(value, buffer, &length, &K);
+        Grisu2(value, buffer, length, K);
         return Prettify(buffer, length, K, maxDecimalPlaces);
     }
 }

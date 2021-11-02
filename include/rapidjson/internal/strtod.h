@@ -110,7 +110,7 @@ inline int CheckWithinHalfULP(double b, const BigInteger& d, int dExp) {
     return delta.Compare(hS);
 }
 
-inline bool StrtodFast(double d, int p, double* result) {
+inline bool StrtodFast(double d, int p, double& result) {
     // Use fast path for string-to-double conversion if possible
     // see http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/
     if (p > 22  && p < 22 + 16) {
@@ -120,8 +120,7 @@ inline bool StrtodFast(double d, int p, double* result) {
     }
 
     if (p >= -22 && p <= 22 && d <= 9007199254740991.0) { // 2^53 - 1
-        RAPIDJSON_ASSERT(result != nullptr);
-        *result = FastPath(d, p);
+        result = FastPath(d, p);
         return true;
     }
     else
@@ -129,9 +128,8 @@ inline bool StrtodFast(double d, int p, double* result) {
 }
 
 // Compute an approximation and see if it is within 1/2 ULP
-inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result) {
+inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double& result) {
     RAPIDJSON_ASSERT(decimals != nullptr);
-    RAPIDJSON_ASSERT(result != nullptr);
     uint64_t significand = 0;
     int i = 0;   // 2^64 - 1 = 18446744073709551615, 1844674407370955161 = 0x1999999999999999    
     for (; i < dLen; i++) {
@@ -156,7 +154,7 @@ inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result
     dExp += remaining;
 
     int actualExp;
-    DiyFp cachedPower = GetCachedPower10(dExp, &actualExp);
+    DiyFp cachedPower = GetCachedPower10(dExp, actualExp);
     if (actualExp != dExp) {
         static const DiyFp kPow10[] = {
             DiyFp(RAPIDJSON_UINT64_C2(0xa0000000, 0x00000000), -60),  // 10^1
@@ -203,7 +201,7 @@ inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result
         }
     }
 
-    *result = rounded.ToDouble();
+    result = rounded.ToDouble();
 
     return halfWay - static_cast<unsigned>(error) >= precisionBits || precisionBits >= halfWay + static_cast<unsigned>(error);
 }
@@ -232,7 +230,7 @@ inline double StrtodFullPrecision(double d, int p, const char* decimals, size_t 
     RAPIDJSON_ASSERT(length >= 1);
 
     double result = 0.0;
-    if (StrtodFast(d, p, &result))
+    if (StrtodFast(d, p, result))
         return result;
 
     RAPIDJSON_ASSERT(length <= INT_MAX);
@@ -281,7 +279,7 @@ inline double StrtodFullPrecision(double d, int p, const char* decimals, size_t 
     if (dLen + dExp > 309)
         return std::numeric_limits<double>::infinity();
 
-    if (StrtodDiyFp(decimals, dLen, dExp, &result))
+    if (StrtodDiyFp(decimals, dLen, dExp, result))
         return result;
 
     // Use approximation from StrtodDiyFp and make adjustment with BigInteger comparison

@@ -235,8 +235,7 @@ inline DiyFp GetCachedPowerByIndex(size_t index) {
     return DiyFp(kCachedPowers_F[index], kCachedPowers_E[index]);
 }
 
-inline DiyFp GetCachedPower(int e, int* K) {
-    RAPIDJSON_ASSERT(K != nullptr);
+inline DiyFp GetCachedPower(int e, int& K) {
     //int k = static_cast<int>(ceil((-61 - e) * 0.30102999566398114)) + 374;
     double dk = (-61 - e) * 0.30102999566398114 + 347;  // dk must be positive, so can do ceiling in positive
     int k = static_cast<int>(dk);
@@ -244,16 +243,15 @@ inline DiyFp GetCachedPower(int e, int* K) {
         k++;
 
     unsigned index = static_cast<unsigned>((k >> 3) + 1);
-    *K = -(-348 + static_cast<int>(index << 3));    // decimal exponent no need lookup table
+    K = -(-348 + static_cast<int>(index << 3));    // decimal exponent no need lookup table
 
     return GetCachedPowerByIndex(index);
 }
 
-inline DiyFp GetCachedPower10(int exp, int *outExp) {
-    RAPIDJSON_ASSERT(outExp != nullptr);
+inline DiyFp GetCachedPower10(int exp, int& outExp) {
     RAPIDJSON_ASSERT(exp >= -348);
     unsigned index = static_cast<unsigned>(exp + 348) / 8u;
-    *outExp = -348 + static_cast<int>(index) * 8;
+    outExp = -348 + static_cast<int>(index) * 8;
     return GetCachedPowerByIndex(index);
 }
 
