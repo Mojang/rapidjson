@@ -1561,7 +1561,7 @@ private:
                             useDouble = true;
                             break;
                         }
-                    i64 = i64 * 10 + s.TakePush() - '0';
+                    i64 = i64 * 10 + static_cast<unsigned>(s.TakePush()) - '0';
                     significandDigit++;
                 }
         }

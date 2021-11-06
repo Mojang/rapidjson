@@ -173,11 +173,11 @@ inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result
 
     v = v * cachedPower;
 
-    error = error + kUlp + (error == 0 ? 0 : 1);
+    error += static_cast<int64_t>(kUlp) + (error == 0 ? 0 : 1);
 
     const int oldExp = v.e;
     v = v.Normalize();
-    error = error << (oldExp - v.e);
+    error <<= static_cast<int64_t>(oldExp) - v.e;
 
     const int effectiveSignificandSize = Double::EffectiveSignificandSize(64 + v.e);
     int precisionSize = 64 - effectiveSignificandSize;
