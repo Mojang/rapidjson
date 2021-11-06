@@ -135,7 +135,7 @@ inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result
         if (significand  >  RAPIDJSON_UINT64_C2(0x19999999, 0x99999999) ||
             (significand == RAPIDJSON_UINT64_C2(0x19999999, 0x99999999) && decimals[i] > '5'))
             break;
-        significand = significand * 10u + static_cast<unsigned>(decimals[i] - '0');
+        significand = significand * 10u + static_cast<unsigned>(static_cast<uint64_t>(decimals[i]) - '0');
     }
     
     if (i < dLen && decimals[i] >= '5') // Rounding
@@ -173,11 +173,11 @@ inline bool StrtodDiyFp(const char* decimals, int dLen, int dExp, double* result
 
     v = v * cachedPower;
 
-    error += kUlp + (error == 0 ? 0 : 1);
+    error += static_cast<int64_t>(kUlp) + (error == 0 ? 0 : 1);
 
     const int oldExp = v.e;
     v = v.Normalize();
-    error <<= oldExp - v.e;
+    error = error << (oldExp - v.e);
 
     const int effectiveSignificandSize = Double::EffectiveSignificandSize(64 + v.e);
     int precisionSize = 64 - effectiveSignificandSize;
