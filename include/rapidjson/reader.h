@@ -272,7 +272,8 @@ void SkipWhitespace(InputStream& is) {
 }
 
 inline const char* SkipWhitespace(const char* p, const char* end) {
-    while (p != nullptr && p != end && (*p == ' ' || *p == '\n' || *p == '\r' || *p == '\t'))
+    RAPIDJSON_ASSERT(p);
+    while (p != end && (*p == ' ' || *p == '\n' || *p == '\r' || *p == '\t'))
         ++p;
     return p;
 }

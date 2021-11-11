@@ -92,7 +92,7 @@ public:
         uint64_t k = 0;
         for (size_t i = 0; i < count_; i++) {
             uint64_t hi;
-            digits_[i] = MulAdd64(digits_[i], u, k, &hi);
+            digits_[i] = MulAdd64(digits_[i], u, k, hi);
             k = hi;
         }
         
@@ -247,18 +247,17 @@ private:
     }
 
     // Assume a * b + k < 2^128
-    static uint64_t MulAdd64(uint64_t a, uint64_t b, uint64_t k, uint64_t* outHigh) {
-        RAPIDJSON_ASSERT(outHigh != nullptr);
+    static uint64_t MulAdd64(uint64_t a, uint64_t b, uint64_t k, uint64_t& outHigh) {
 #if defined(_MSC_VER) && defined(_M_AMD64)
-        uint64_t low = _umul128(a, b, outHigh) + k;
+        uint64_t low = _umul128(a, b, &outHigh) + k;
         if (low < k)
-            (*outHigh)++;
+            outHigh++;
         return low;
 #elif (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__x86_64__)
         __extension__ typedef unsigned __int128 uint128;
         uint128 p = static_cast<uint128>(a) * static_cast<uint128>(b);
         p += k;
-        *outHigh = static_cast<uint64_t>(p >> 64);
+        outHigh = static_cast<uint64_t>(p >> 64);
         return static_cast<uint64_t>(p);
 #else
         const uint64_t a0 = a & 0xFFFFFFFF, a1 = a >> 32, b0 = b & 0xFFFFFFFF, b1 = b >> 32;
@@ -273,7 +272,7 @@ private:
         lo += k;
         if (lo < k)
             hi++;
-        *outHigh = hi;
+        outHigh = hi;
         return lo;
 #endif
     }

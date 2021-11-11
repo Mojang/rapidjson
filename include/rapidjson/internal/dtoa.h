@@ -99,7 +99,7 @@ inline void DigitGen(const DiyFp& W, const DiyFp& Mp, uint64_t delta, char* buff
         delta *= 10;
         char d = static_cast<char>(p2 >> -one.e);
         if (d || len)
-            buffer[(len)++] = static_cast<char>('0' + d);
+            buffer[len++] = static_cast<char>('0' + d);
         p2 &= one.f - 1;
         kappa--;
         if (p2 < delta) {

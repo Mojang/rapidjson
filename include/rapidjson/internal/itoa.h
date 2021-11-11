@@ -41,6 +41,7 @@ inline char* u32toa(uint32_t value, char* buffer) {
 
     const char* cDigitsLut = GetDigitsLut();
     RAPIDJSON_ASSERT(cDigitsLut != nullptr);
+
     if (value < 10000) {
         const uint32_t d1 = (value / 100) << 1;
         const uint32_t d2 = (value % 100) << 1;
