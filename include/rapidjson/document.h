@@ -2074,7 +2074,7 @@ private:
             data_.f.flags = kCopyStringFlag;
             data_.s.length = s.length;
             uint64_t mallocLength = static_cast<uint64_t>(s.length) + 1;
-            str = static_cast<Ch *>(allocator.Malloc(static_cast<int32_t>(mallocLength)* sizeof(Ch)));
+            str = static_cast<Ch *>(allocator.Malloc(static_cast<int32_t>(mallocLength) * sizeof(Ch)));
             SetStringPointer(str);
         }
         std::memcpy(str, s, s.length * sizeof(Ch));
