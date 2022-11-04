@@ -988,6 +988,7 @@ public:
     */
     template <typename T> RAPIDJSON_DISABLEIF_RETURN((internal::OrExpr<internal::IsPointer<T>,internal::IsGenericValue<T> >), (bool)) operator==(const T& rhs) const { return *this == GenericValue(rhs); }
 
+#ifndef __cpp_impl_three_way_comparison
     //! Not-equal-to operator
     /*! \return !(*this == rhs)
      */
@@ -1002,7 +1003,6 @@ public:
      */
     template <typename T> RAPIDJSON_DISABLEIF_RETURN((internal::IsGenericValue<T>), (bool)) operator!=(const T& rhs) const { return !(*this == rhs); }
 
-#ifndef __cpp_impl_three_way_comparison
     //! Equal-to operator with arbitrary types (symmetric version)
     /*! \return (rhs == lhs)
      */
