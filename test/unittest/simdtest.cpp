@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making RapidJSON available.
 // 
-// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. All rights reserved.
+// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
 //
 // Licensed under the MIT License (the "License"); you may not use this file except
 // in compliance with the License. You may obtain a copy of the License at
@@ -87,14 +87,12 @@ TEST(SIMD, SIMD_SUFFIX(SkipWhitespace_EncodedMemoryStream)) {
 
         MemoryStream ms(buffer, 1024);
         EncodedInputStream<UTF8<>, MemoryStream> s(ms);
-        size_t i = 0;
         for (;;) {
             SkipWhitespace(s);
             if (s.Peek() == '\0')
                 break;
             //EXPECT_EQ(i, s.Tell());
             EXPECT_EQ('X', s.Take());
-            i += step;
         }
     }
 }
